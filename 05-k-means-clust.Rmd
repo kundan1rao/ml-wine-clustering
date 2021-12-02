@@ -8,3 +8,58 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+# Clustering
+
+## K-means clustering
+
+```{r}
+#kmeans
+set.seed(4)
+for (i in 2:20) {
+km.out<-kmeans(x,3,nstart = 20)
+cat(km.out$tot.withinss," | ",km.out$totss," | ",km.out$betweenss,"\n")
+}
+```
+
+```{r}
+par(mfrow=c(1,2))
+plot(data,col=(km.out$cluster+1),pch=20,cex=2)
+```
+
+
+
+
+
+
+
+
+
+
+```{r}
+# kmeans
+opt_km = Optimal_Clusters_KMeans(data.scaled, max_clusters = 10, criterion = "distortion_fK",
+plot_clusters = T)
+```
+```{r}
+#mini batch kmeans
+params_mbkm = list(batch_size = 15, init_fraction = 0.3, early_stop_iter = 10)
+
+opt_km = Optimal_Clusters_KMeans(data.scaled, max_clusters = 10, criterion = "distortion_fK",plot_clusters = T, mini_batch_params = params_mbkm)
+```
+```{r}
+#non contigious search space
+search_space = c(2,5)
+opt_km = Optimal_Clusters_KMeans(data.scaled, max_clusters = search_space, criterion = "variance_explained",plot_clusters = T)
+opt_km
+```
+
+
+```{r}
+ data(soybean)
+ dat = soybean[, -ncol(soybean)]
+cm = Cluster_Medoids(dat, clusters = 5, distance_metric = 'jaccard_coefficient')
+plt_sd = Silhouette_Dissimilarity_Plot(cm, silhouette = TRUE)
+```
+

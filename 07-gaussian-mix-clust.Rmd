@@ -8,3 +8,25 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r}
+gmm = GMM(data.scaled, 2, dist_mode = "maha_dist", seed_mode = "random_subset", km_iter = 10,
+          
+          em_iter = 10, verbose = F)  
+gmm
+
+# predict centroids, covariance matrix and weights
+
+pr = predict_GMM(data.scaled, gmm$centroids, gmm$covariance_matrices, gmm$weights)    
+pr
+```
+
+
+
+
+```{r}
+library(ClusterR)
+opt_gmm = Optimal_Clusters_GMM(data.scaled, max_clusters = 10, criterion = "BIC",
+                               dist_mode = "maha_dist", seed_mode = "random_subset",km_iter = 10, em_iter =10,var_floor=1e-10,plot_data = T)
+opt_gmm
+```

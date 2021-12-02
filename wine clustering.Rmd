@@ -7,6 +7,7 @@ loading dataset in the workspace
 ```{r}
 library(readr)
 data <- read_csv("Wine 0.csv - Wine 0.csv.csv", show_col_types = F)
+data.scaled <- as.data.frame(scale(data))
 ```
 
 # Check structure of the dataset and data types of variables
@@ -170,7 +171,8 @@ head(pr.out$x)
 
 ```{r}
 # biplot
-biplot(pr.out,scale=0)
+ggbiplot::ggbiplot(pr.out)
+#biplot(pr.out,scale=0)
 ```
 Observation:-
 1. Alcohol, Color intensity, Proline, Magnesium, Ash seems to form a cluster
@@ -237,6 +239,21 @@ plot(data,col=(km.out$cluster+1),pch=20,cex=2)
 hc.complete<-hclust(dist(x),method = "complete")
 hc.average<-hclust(dist(x),method = "average")
 hc.single<-hclust(dist(x),method = "single")
+```
+
+```{r}
+str(as.dendrogram(hc.average))
+```
+
+
+```{r}
+library(dplyr)
+library(stats)
+nP <- list(col = 3:2, cex = c(2.0, 0.75), pch =  21:22,
+           bg =  c("light blue", "pink"),
+           lab.cex = 0.75, lab.col = "tomato")
+#plot(d3, nodePar= nP, edgePar = list(col = "gray", lwd = 2), horiz = TRUE)
+as.dendrogram(hc.average)%>%plot(., nodePar=nP, edgePar=list(col="grey",lwd=2),horiz=T)
 ```
 
 ```{r}

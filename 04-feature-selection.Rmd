@@ -7,3 +7,94 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+
+```{r}
+#principle component
+pr.out<-prcomp(data,scale=T)
+```
+
+```{r}
+names(pr.out)
+```
+
+```{r}
+pr.out$center
+```
+
+```{r}
+pr.out$scale
+```
+
+```{r}
+pr.out$sdev
+```
+
+```{r}
+# principle component loading vector
+pr.out$rotation
+```
+
+```{r}
+#principle component score vectors dimention
+dim(pr.out$x)
+```
+
+```{r}
+#principle component score vector
+head(pr.out$x)
+```
+
+
+
+
+```{r}
+# biplot
+ggbiplot::ggbiplot(pr.out)
+#biplot(pr.out,scale=0)
+```
+Observation:-
+1. Alcohol, Color intensity, Proline, Magnesium, Ash seems to form a cluster
+2. Hue, Total phenols, Flavanoids, 0D280/0D315 of diluted wines seems to form another cluster
+3. Malic acid, Nonflavanoid phenols, Alcalinity of ash seems to form yet another cluster
+
+```{r}
+# variances explained by principle components
+pr.var <- pr.out$sdev^2
+pr.var
+```
+
+
+```{r}
+#PVE proportion of variance explained by each principle components
+pve <- pr.var/sum(pr.var)
+pve
+```
+```{r}
+# plot of PVE explained by each principle component
+par(mfwow=c(2,1))
+plot(pve, xlab="Principle Component", ylab = "Proportion of variance explained", ylim=c(0,1), type="b")
+plot(cumsum(pve), xlab="principle component",ylab="Cumulative proportion of variance explained", ylim=c(0,1), type="b")
+```
+# Matrix completion
+
+```{r}
+x <- data.matrix(scale(data))
+pcob <- prcomp(x)
+summary(pcob)
+```
+```{r}
+# singular value decomposition
+sX<-svd(x)
+names(sX)
+round(sX$v,3)
+```
+```{r}
+# compare with the above , both is same i.e. loading matrix
+pcob$rotation
+```

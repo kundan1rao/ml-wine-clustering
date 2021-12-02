@@ -8,3 +8,22 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Univariate plot
+```{r}
+library(ggplot2)
+histf <- function(var){ggplot(data, aes(x=var))+geom_histogram()}
+lapply(data,histf)
+```
+
+```{r}
+library(ggplot2)
+boxf<- function(var){ggplot()+geom_boxplot(aes(y=var))}
+lapply(data,boxf)
+
+```
+
+```{r}
+summary(data)
+```
+

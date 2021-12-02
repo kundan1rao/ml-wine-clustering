@@ -8,3 +8,50 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Hierarchical Clustering
+
+```{r}
+# hierarchical clustering
+hc.complete<-hclust(dist(x),method = "complete")
+hc.average<-hclust(dist(x),method = "average")
+hc.single<-hclust(dist(x),method = "single")
+```
+
+```{r}
+str(as.dendrogram(hc.average))
+```
+
+
+```{r}
+library(dplyr)
+library(stats)
+nP <- list(col = 3:2, cex = c(2.0, 0.75), pch =  21:22,
+           bg =  c("light blue", "pink"),
+           lab.cex = 0.75, lab.col = "tomato")
+#plot(d3, nodePar= nP, edgePar = list(col = "gray", lwd = 2), horiz = TRUE)
+as.dendrogram(hc.average)%>%plot(., nodePar=nP, edgePar=list(col="grey",lwd=2),horiz=T)
+```
+
+```{r}
+# dendrograms plot
+par(mfrow=c(1,3))
+plot(hc.complete,main="Complete Linkage", xlab="",sub="",cex=.9)
+plot(hc.average,main="Average Linkage", xlab="",sub="",cex=.9)
+plot(hc.single,main="Single Linkage", xlab="",sub="",cex=.9)
+```
+
+```{r}
+# each wine's cluster
+cutree(hc.complete,3)
+cutree(hc.average,4)
+cutree(hc.single,5)
+```
+
+## correlation based distance
+
+```{r}
+dd<-as.dist(1-cor(t(x)))
+plot(hclust(dd,method = "complete"),main="Complete linkage with correlation-based distance",xlab="",sub="")
+```
+

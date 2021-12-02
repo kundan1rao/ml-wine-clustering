@@ -8,3 +8,56 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r}
+cor(data)
+```
+
+```{r}
+#row names
+names<-row.names(data)
+names
+```
+
+
+```{r}
+# column names
+names(data)
+```
+
+
+```{r}
+# means
+apply(data,2,mean)
+```
+```{r}
+#variances
+apply(data,2,var)
+```
+
+
+# distance matrix
+```{r}
+dist.eucl <-dist(data.scaled, method = "euclidean")
+round(as.matrix(dist(data.scaled, method = "euclidean")))
+
+```
+
+```{r}
+library(factoextra)
+fviz_dist(dist.eucl)
+```
+
+```{r}
+library(corrplot)
+corrplot(cor(data.scaled), method ="pie")
+```
+```{r}
+corrplot(cor(data.scaled), method ="number")
+```
+
+```{r}
+library("gplots")
+heatmap.2(as.matrix(data.scaled),scale = "none",symmetric =T)
+```
+

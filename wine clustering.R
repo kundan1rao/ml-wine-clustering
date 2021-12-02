@@ -46,6 +46,40 @@ boxf<-function(z){
 }
 
 
+install.packages("spectrum")
+library(Spectrum)
+data.trans <- as.matrix(scale(t(data)))
+rownames(data.trans)<-NULL
+colnames(data.trans)<-NULL
+clust.spect <- cluster_similarity(data.trans[[1]],k=2:5)
+
+cluster_similarity(data.trans, k = 3, 
+                   clusteralg = "GMM", specalg = "Ng")
+
+
+ng_similarity <- cluster_similarity(data.trans,k=8)
+k_test <- estimate_k(data.trans)
+
+test1 <- Spectrum(blobs,showpca=TRUE,fontsize=8,dotsize=2)
+
+test1 <- Spectrum(data.trans,showpca=TRUE,fontsize=8,dotsize=2)
+
+View(blobs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
