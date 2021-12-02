@@ -8,3 +8,89 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Basic data cleaning and exploration
+
+loading dataset in the workspace
+
+# importing the wine dataset
+
+```{r}
+library(readr)
+data <- read_csv("Wine 0.csv - Wine 0.csv.csv", show_col_types = F)
+```
+
+# Check structure of the dataset and data types of variables
+```{r}
+dim(data)
+```
+
+```{r}
+class(data)
+```
+
+```{r}
+data <- as.data.frame(data)
+class(data)
+```
+
+```{r}
+# structure
+str(data)
+```
+Observation : 
+  
+  1.   Every variable is of numeric (double) data types
+  2.   There are 178 observation of 13 variables
+
+
+
+# Head and tail of the data set
+
+```{r}
+# head
+head(data)
+```
+
+```{r}
+# tail
+tail(data)
+```
+
+# Checking for null and other types of missing data
+
+```{r}
+# any NA in the dataframe
+any(is.na(data))
+```
+
+```{r}
+# total NAs
+sum(is.na(data))
+```
+
+```{r}
+# checkinf if there is any infinite valuesm
+f<-function(x){any(is.infinite(x))}
+sapply(data,f)
+```
+
+```{r}
+# Checking for total infinite values
+f <- function(x){sum(is.infinite(x))}
+sapply(data,f)
+```
+
+```{r}
+# checking for NaN values
+f<-function(x){any(is.nan(x))}
+sapply(data,f)
+```
+
+```{r}
+# total NaN values
+f <- function(x){sum(is.nan(x))}
+sapply(data,f)
+```
+
+Observation: There are neither infinity nor ant NaN values in any variable in whole dataset.
