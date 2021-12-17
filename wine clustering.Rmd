@@ -8,6 +8,7 @@ loading dataset in the workspace
 library(readr)
 data <- read_csv("Wine 0.csv - Wine 0.csv.csv", show_col_types = F)
 data.scaled <- as.data.frame(scale(data))
+data.matrx <- as.matrix(as.data.frame(scale(data)))
 ```
 
 # Check structure of the dataset and data types of variables
@@ -226,6 +227,26 @@ for (i in 2:20) {
 km.out<-kmeans(x,3,nstart = 20)
 cat(km.out$tot.withinss," | ",km.out$totss," | ",km.out$betweenss,"\n")
 }
+```
+
+```{r}
+km.out
+#km.out$cluster
+f=function(x){x= mean(x)}
+data.clust.kmeans <- cbind(data,as.factor(km.out$cluster)) %>% group_by('cluster') %>% sapply(., f %>% as.data.frame() %>% na.omit() %>% rbind(max_min,.)
+data.clust.kmeans1 <-
+```
+
+```{r}
+# Define the variable ranges: maximum and minimum
+max_min <- data.frame(
+  Alcohol = c(max(data$Alcohol), min(data$Alcohol)), `Malic acid` = c(max(data$`Malic acid`), min(data$`Malic acid`)), Ash = c(max(data$Ash), min(data$Ash)),
+  `Alcalinity of ash` = c(max(data$`Alcalinity of ash`), min(data$`Alcalinity of ash`)), Magnesium = c(max(data$Magnesium), min(data$Magnesium)), `Total phenols` = c(max(data$`Total phenols`), min(data$`Total phenols`)),
+  Flavanoids = c(max(data$Flavanoids), min(data$Flavanoids)), `Nonflavanoid phenols` = c(max(data$`Nonflavanoid phenols`), min(data$`Nonflavanoid phenols`)), Proanthocyanins = c(max(data$Proanthocyanins), min(data$Proanthocyanins)), `Color intensity` = c(max(data$`Color intensity`), min(data$`Color intensity`)), Hue = c(max(data$Hue), min(data$Hue)), `OD280/OD315 of diluted wines` = c(max(data$`OD280/OD315 of diluted wines`), min(data$`OD280/OD315 of diluted wines`)), Proline = c(max(data$Proline), min(data$Proline)) 
+)
+rownames(max_min) <- c("Max", "Min")
+
+# Bind the variable ranges to the data
 ```
 
 ```{r}

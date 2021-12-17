@@ -14,6 +14,55 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## K-means clustering
 
+deciding optimal number of clusters
+
+```{r}
+library(factoextra)
+fviz_nbclust(data.scaled, kmeans, method = "wss")
+```
+Observation :-
+We can see elbow at k = 3.
+
+Modified plot :-
+```{r}
+fviz_nbclust(data.scaled, kmeans, method = "wss")+
+  geom_vline(xintercept = 3, linetype = 2)
+```
+
+```{r}
+# Compute k-means with k = 3
+set.seed(123)
+km.res <- kmeans(data.scaled, 3, nstart = 25)
+print(km.res)
+```
+
+```{r}
+aggregate(data, by=list(cluster=km.res$cluster), mean)
+```
+```{r}
+data.clust.kmeans <- cbind(data, cluster = km.res$cluster)
+head(data.clust.kmeans)
+```
+
+Visualising k-means:-
+```{r}
+fviz_cluster(km.res, data = data.scaled,
+palette = c( "#00AFBB", "#E7B800", "#FC4E07"),
+ellipse.type = "euclid", # Concentration ellipse
+star.plot = TRUE, # Add segments from centroids to items
+repel = TRUE, # Avoid label overplotting (slow)
+ggtheme = theme_minimal()
+)
+```
+
+
+```{r}
+#factoextra::
+dist.matrix <- get_dist(data.matrx)
+fviz(dist.matrix)  
+```
+
+
 ```{r}
 #kmeans
 set.seed(4)
