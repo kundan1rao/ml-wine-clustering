@@ -8,3 +8,40 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+Loading required libraries:-
+```{r}
+library(cluster)
+library(factoextra)
+```
+
+finding optimum number of cluster:-
+```{r}
+fviz_nbclust(data.scaled, pam, method = "silhouette")+
+theme_classic()
+```
+Observation:-
+optimum number of cluster is 3.
+
+Finding clusters using k=3
+```{r}
+pam.res <- pam(data.scaled, 3)
+print(pam.res)
+```
+Clustered data :-
+```{r}
+data.clust.medoids <- cbind(data, cluster = pam.res$cluster)
+head(data.clust.medoids, n = 5)
+```
+
+Visualising clusters:-
+```{r}
+fviz_cluster(pam.res,
+palette = c("#00AFBB", "#FC4E07","#00AB33"), # color palette
+ellipse.type = "t", # Concentration ellipse
+repel = TRUE, # Avoid label overplotting (slow)
+ggtheme = theme_classic()
+)
+```
+
+The clusters seems similar to k-means
