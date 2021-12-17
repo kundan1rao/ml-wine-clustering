@@ -10,48 +10,207 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Hierarchical Clustering
-
+Method in distance matrix:-
+Euclidean
+Linkage method in clustering algorithm:-
+1. Complete
+2. WARD.D2
 ```{r}
 # hierarchical clustering
-hc.complete<-hclust(dist(x),method = "complete")
-hc.average<-hclust(dist(x),method = "average")
-hc.single<-hclust(dist(x),method = "single")
+dist.mat <- dist(data.scaled, method = "euclidean")
+hc.complete<-hclust(dist.mat,method = "complete")
+hc.avg<-hclust(dist.mat,method = "average")
+hc.ward<-hclust(dist.mat,method = "ward.D2")
 ```
 
 ```{r}
-str(as.dendrogram(hc.average))
-```
-
-
-```{r}
-library(dplyr)
-library(stats)
-nP <- list(col = 3:2, cex = c(2.0, 0.75), pch =  21:22,
-           bg =  c("light blue", "pink"),
-           lab.cex = 0.75, lab.col = "tomato")
-#plot(d3, nodePar= nP, edgePar = list(col = "gray", lwd = 2), horiz = TRUE)
-as.dendrogram(hc.average)%>%plot(., nodePar=nP, edgePar=list(col="grey",lwd=2),horiz=T)
+#str(as.dendrogram(hc.ward))
 ```
 
 ```{r}
+# ISL book
 # dendrograms plot
-par(mfrow=c(1,3))
+par(mfrow=c(1,2))
 plot(hc.complete,main="Complete Linkage", xlab="",sub="",cex=.9)
-plot(hc.average,main="Average Linkage", xlab="",sub="",cex=.9)
-plot(hc.single,main="Single Linkage", xlab="",sub="",cex=.9)
+plot(hc.ward,main="WARD D2", xlab="",sub="",cex=.9)
+```
+
+
+```{r}
+# visualising dendograms
+# clustering book
+par(mfrow=c(1,2))
+fviz_dend(hc.complete, cex = 0.5)
+```
+```{r}
+fviz_dend(hc.eucl, cex = 0.5)
+```
+```{r}
+fviz_dend(hc.avg, cex = .5)
+```
+
+
+Verify cluster tree:-
+```{r}
+# cophenetic distance
+hc.complete.coph <- cophenetic(hc.complete)
+hc.avg.coph <- cophenetic(hc.avg)
+hc.ward.coph <- cophenetic(hc.ward)
+
+# correlation b/w the cophenetic distance and original distance
+cor(dist.mat, hc.complete.coph)
+cor(dist.mat, hc.ward.coph)
+cor(dist.mat, hc.avg.coph)
 ```
 
 ```{r}
+# ISL book
 # each wine's cluster
-cutree(hc.complete,3)
-cutree(hc.average,4)
-cutree(hc.single,5)
+grp.complete <- cutree(hc.complete,3)
+grp.avg <- cutree(hc.avg, 9)
+grp.ward <- cutree(hc.ward,3)
+table(grp.complete)
+table(grp.avg)
+table(grp.ward)
 ```
 
-## correlation based distance
 
 ```{r}
-dd<-as.dist(1-cor(t(x)))
-plot(hclust(dd,method = "complete"),main="Complete linkage with correlation-based distance",xlab="",sub="")
+grp.avg
+grp.complete
+grp.ward
+```
+Visualising cutree
+```{r}
+# Cut in 4 groups and color by groups
+fviz_dend(hc.ward, k = 3, # Cut in four groups
+cex = 0.5, # label size
+k_colors = c("#2E66DF", "#00AFBB", "#E7B800"),
+color_labels_by_k = TRUE, # color labels by groups
+rect = TRUE, # Add rectangle around groups
+rect_border = c("#2E66DF", "#00AFBB", "#E7B800"),
+rect_fill = TRUE,
+main = "Dendrogram - ward.D2",
+xlab = "Objects", ylab = "Distance", sub = "",
+ggtheme = theme_minimal()
+)
+```
+
+```{r}
+# Cut in 4 groups and color by groups
+fviz_dend(hc.complete, k = 3, # Cut in four groups
+cex = 0.5, # label size
+k_colors = c("#2E00DF", "#55AFBB", "#E7B800"),
+color_labels_by_k = TRUE, # color labels by groups
+rect = TRUE # Add rectangle around groups
+)
+```
+
+```{r}
+# Cut in 4 groups and color by groups
+fviz_dend(hc.avg, k = 9, # Cut in four groups
+cex = 0.5, # label size
+#k_colors = c("#2E9F00", "#00AFBB", "#E7B866"),
+color_labels_by_k = TRUE, # color labels by groups
+rect = TRUE # Add rectangle around groups
+)
+```
+```{r}
+# circular visualisation
+fviz_dend(hc.ward, cex = 0.5, k = 3,
+k_colors = "jco", type = "circular")
+```
+```{r}
+library(igraph)
+fviz_dend(hc.ward, k = 3, k_colors = "jco",
+type = "phylogenic", repel = TRUE,
+phylo_layout = "layout_as_tree"
+)
+```
+
+
+
+As cluster:-
+```{r}
+fviz_cluster(list(data = data.scaled, cluster = grp.complete),
+#palette = c("#2E9FDF", "#00AFBB", "#E7B800", "#FC4E07"),
+ellipse.type = "convex", # Concentration ellipse
+repel = TRUE, # Avoid label overplotting (slow)
+show.clust.cent = FALSE, ggtheme = theme_minimal())
+```
+
+```{r}
+fviz_cluster(list(data = data.scaled, cluster = grp.ward),
+#palette = c("#2E9FDF", "#00AFBB", "#E7B800", "#FC4E07"),
+ellipse.type = "convex", # Concentration ellipse
+repel = TRUE, # Avoid label overplotting (slow)
+show.clust.cent = FALSE, ggtheme = theme_minimal())
+```
+```{r}
+fviz_cluster(list(data = data.scaled, cluster = grp.avg),
+#palette = c("#2E9FDF", "#00AFBB", "#E7B800", "#FC4E07"),
+ellipse.type = "convex", # Concentration ellipse
+repel = TRUE, # Avoid label overplotting (slow)
+show.clust.cent = FALSE, ggtheme = theme_minimal())
+```
+
+Using cluster package for hirarchical clustering
+```{r}
+library("cluster")
+# Agglomerative Nesting (Hierarchical Clustering)
+hc.agnes <- agnes(x = data, # data matrix
+stand = TRUE, # Standardize the data
+metric = "euclidean", # metric for distance matrix
+method = "ward" # Linkage method
+)
+# DIvisive ANAlysis Clustering
+hc.diana <- diana(x = data, # data matrix
+stand = TRUE, # standardize the data
+metric = "euclidean" # metric for distance matrix
+)
+
+fviz_dend(hc.agnes, cex = 0.6, k=3)
+```
+```{r}
+fviz_dend(hc.diana, cex = 0.6, k=3)
+```
+
+Comparing dendograms:-
+```{r}
+library(dendextend)
+# creating two dendograms
+dend1 <- as.dendrogram(hc.avg)
+dend2 <- as.dendrogram(hc.ward)
+
+# creating a list to hold the dendograms
+dend.list <- dendlist(dend1, dend2)
+```
+
+```{r}
+tanglegram(dend1,dend2,
+           highlight_distinct_edges = FALSE, # Turn-off dashed lines
+common_subtrees_color_lines = FALSE, # Turn-off line colors
+common_subtrees_color_branches = TRUE, # Color common branches
+main = paste("entanglement =", round(entanglement(dend.list), 2))
+)
+```
+```{r}
+# Cophenetic correlation matrix
+cor.dendlist(dend.list, method = "cophenetic")
+```
+
+```{r}
+# Baker correlation matrix
+cor.dendlist(dend.list, method = "baker")
+```
+
+```{r}
+# Cophenetic correlation coefficient
+cor_cophenetic(dend1, dend2)
+```
+
+```{r}
+# Baker correlation coefficient
+cor_bakers_gamma(dend1, dend2)
 ```
 

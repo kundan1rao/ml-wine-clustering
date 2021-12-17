@@ -67,8 +67,9 @@ test1 <- Spectrum(data.trans,showpca=TRUE,fontsize=8,dotsize=2)
 View(blobs)
 
 
-
-
+# Book packages and some scripts:-
+install.packages("cluster")
+devtools::install_github("kassambara/factoextra")
 
 
 
