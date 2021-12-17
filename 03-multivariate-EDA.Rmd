@@ -7,10 +7,12 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(knitr)
 ```
 
 ```{r}
-cor(data)
+cor(data) %>% kable()
 ```
 
 ```{r}
@@ -39,8 +41,7 @@ apply(data,2,var)
 # distance matrix
 ```{r}
 dist.eucl <-dist(data.scaled, method = "euclidean")
-round(as.matrix(dist(data.scaled, method = "euclidean")))
-
+round(as.matrix(dist(data.scaled, method = "euclidean"))[1:10,1:10],1) 
 ```
 
 ```{r}
