@@ -8,3 +8,93 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Model selection
+## Internal measure
+```{r}
+library(clValid)
+# wine data set:
+# Computing clValid
+clmethods <- c("hierarchical","kmeans","pam")
+intern <- clValid(data.scaled, nClust = 2:6,
+clMethods = clmethods, validation = "internal",method="complete")
+# Summary
+summary(intern)
+```
+
+## stability
+```{r}
+# Stability measures
+clmethods <- c("hierarchical","kmeans","pam")
+stab <- clValid(data.scaled, nClust = 2:6, clMethods = clmethods,
+validation = "stability",method="complete")
+# Display only optimal Scores
+optimalScores(stab)
+```
+
+# computing p-value for hirarchical clustering
+```{r}
+library(pvclust)
+set.seed(123)
+res.pv <- pvclust(data.scaled, method.dist="euclidean",
+method.hclust="average", nboot = 100)
+# Default plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
+# computing p-value for hirarchical clustering
+```{r}
+library(pvclust)
+set.seed(123)
+res.pv <- pvclust(data.scaled, method.dist="euclidean",
+method.hclust="complete", nboot = 100)
+# Default plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
+
+# computing p-value for hirarchical clustering
+```{r}
+library(pvclust)
+set.seed(123)
+res.pv <- pvclust(data.scaled, method.dist="euclidean",
+method.hclust="ward", nboot = 100)
+# Default plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
+
+# computing p-value for hirarchical clustering
+```{r}
+library(pvclust)
+set.seed(123)
+res.pv <- pvclust(data.scaled, method.dist="cor",
+method.hclust="average", nboot = 100)
+# Default plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
+
+
+# computing p-value for hirarchical clustering
+```{r}
+library(pvclust)
+set.seed(123)
+res.pv <- pvclust(data.scaled, method.dist="cor",
+method.hclust="complete", nboot = 100)
+# Default plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
+
+
+# computing p-value for hirarchical clustering
+```{r}
+library(pvclust)
+set.seed(123)
+res.pv <- pvclust(data.scaled, method.dist="cor",
+method.hclust="average", nboot = 100)
+# Default plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
