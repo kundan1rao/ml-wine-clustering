@@ -9,11 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-
-
-
-
 ```{r}
 #principle component
 pr.out<-prcomp(data,scale=T)
@@ -49,7 +44,12 @@ dim(pr.out$x)
 #principle component score vector
 head(pr.out$x)
 ```
-
+assessing clustering tendency:-
+```{r}
+# Plot the random df
+fviz_pca_ind(pr.out, title = "PCA - Random data",
+geom = "point", ggtheme = theme_classic())
+```
 
 
 
@@ -98,3 +98,148 @@ round(sX$v,3)
 # compare with the above , both is same i.e. loading matrix
 pcob$rotation
 ```
+
+# Assesing clustering tendency:-
+
+Statistical method:-
+```{r}
+library(clustertend)
+# Compute Hopkins statistic for wine dataset
+set.seed(123)
+hopkin <-hopkins(data, n = nrow(data)-1)
+hopkin
+```
+
+Visual method:-
+```{r}
+fviz_dist(dist(data), show_labels = FALSE)+
+labs(title = "Wine data")
+```
+```{r}
+fviz_dist(dist(data.scaled), show_labels = FALSE)+
+labs(title = "Wine data")
+```
+The visual assessment of cluster tendency (VAT) detects the clustering tendency in a visual form by counting the number of
+square shaped dark blocks along the diagonal in a VAT image.
+
+
+
+# determining optimum number of clusters:-
+Kmeans
+```{r}
+# Elbow method
+fviz_nbclust(data.scaled, kmeans, method = "wss") +
+#geom_vline(xintercept = 4, linetype = 2)+
+labs(subtitle = "Elbow method")
+```
+
+```{r}
+# Silhouette method
+fviz_nbclust(data.scaled, kmeans, method = "silhouette")+
+labs(subtitle = "Silhouette method")
+```
+
+```{r}
+# Gap statistic
+# nboot = 50 to keep the function speedy.
+# recommended value: nboot= 500 for your analysis.
+# Use verbose = FALSE to hide computing progression.
+set.seed(123)
+fviz_nbclust(data.scaled, kmeans, nstart = 25, method = "gap_stat", nboot = 50)+
+labs(subtitle = "Gap statistic method")
+```
+
+## pam
+```{r}
+# Elbow method
+fviz_nbclust(data.scaled, pam, method = "wss") +
+#geom_vline(xintercept = 4, linetype = 2)+
+labs(subtitle = "Elbow method")
+```
+
+```{r}
+# Silhouette method
+fviz_nbclust(data.scaled, pam, method = "silhouette")+
+labs(subtitle = "Silhouette method")
+```
+
+```{r}
+# Gap statistic
+# nboot = 50 to keep the function speedy.
+# recommended value: nboot= 500 for your analysis.
+# Use verbose = FALSE to hide computing progression.
+set.seed(123)
+fviz_nbclust(data.scaled, pam, nstart = 25, method = "gap_stat", nboot = 50)+
+labs(subtitle = "Gap statistic method")
+```
+
+## Hierarchical
+```{r}
+# Elbow method
+fviz_nbclust(data.scaled, hcut, method = "wss") +
+#geom_vline(xintercept = 4, linetype = 2)+
+labs(subtitle = "Elbow method")
+```
+
+```{r}
+# Silhouette method
+fviz_nbclust(data.scaled, hcut, method = "silhouette")+
+labs(subtitle = "Silhouette method")
+```
+
+```{r}
+# Gap statistic
+# nboot = 50 to keep the function speedy.
+# recommended value: nboot= 500 for your analysis.
+# Use verbose = FALSE to hide computing progression.
+set.seed(123)
+fviz_nbclust(data.scaled, hcut, nstart = 25, method = "gap_stat", nboot = 50)+
+labs(subtitle = "Gap statistic method")
+```
+
+
+# NbClust() Method
+## Majority rule
+## Kmeans
+```{r}
+library(NbClust)
+nb <- NbClust(data.scaled, distance = "euclidean", min.nc = 2,
+max.nc = 10, method = "kmeans")
+
+# visualising the result
+fviz_nbclust(nb)
+```
+
+##  hierarchical
+ward.D
+```{r}
+library(NbClust)
+nb.ward2 <- NbClust(data.scaled, distance = "euclidean", min.nc = 2,
+max.nc = 10, method = "ward.D")
+
+# visualising the result
+fviz_nbclust(nb.ward2)
+```
+
+average
+```{r}
+library(NbClust)
+nb.avg <- NbClust(data.scaled, distance = "euclidean", min.nc = 2,
+max.nc = 10, method = "average")
+
+# visualising the result
+fviz_nbclust(nb.avg)
+```
+
+complete
+```{r}
+library(NbClust)
+nb.complete <- NbClust(data.scaled, distance = "euclidean", min.nc = 2,
+max.nc = 10, method = "complete")
+
+# visualising the result
+fviz_nbclust(nb.complete)
+```
+
+
+
