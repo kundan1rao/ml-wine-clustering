@@ -22,19 +22,6 @@ data <- read_csv("Wine 0.csv - Wine 0.csv.csv", show_col_types = F)
 
 # Check structure of the dataset and data types of variables
 ```{r}
-dim(data)
-```
-
-```{r}
-class(data)
-```
-
-```{r}
-data <- as.data.frame(data)
-class(data)
-```
-
-```{r}
 # structure
 str(data)
 ```

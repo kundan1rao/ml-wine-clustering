@@ -11,6 +11,7 @@ fviz_cluster(km.out)
 fviz_cluster(km.out, data=x)
 
 install.packages("stringr")
+
 library(stringr)
 histf<-function(z){
   feature=str_replace_all(deparse(substitute(z)),"[data$]","")
@@ -52,20 +53,6 @@ data.trans <- as.matrix(scale(t(data)))
 rownames(data.trans)<-NULL
 colnames(data.trans)<-NULL
 clust.spect <- cluster_similarity(data.trans[[1]],k=2:5)
-
-cluster_similarity(data.trans, k = 3, 
-                   clusteralg = "GMM", specalg = "Ng")
-
-
-ng_similarity <- cluster_similarity(data.trans,k=8)
-k_test <- estimate_k(data.trans)
-
-test1 <- Spectrum(blobs,showpca=TRUE,fontsize=8,dotsize=2)
-
-test1 <- Spectrum(data.trans,showpca=TRUE,fontsize=8,dotsize=2)
-
-View(blobs)
-
 
 # Book packages and some scripts:-
 install.packages("cluster")

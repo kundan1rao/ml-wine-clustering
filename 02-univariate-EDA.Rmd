@@ -11,6 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Univariate plot
 ```{r}
+ boxplot(data, xlab="features",ylab="values", main ="Boxplot of features", col = "green",border = "blue",cex.axis=.5)
+```
+
+
+```{r}
 library(ggplot2)
 histf <- function(var){ggplot(data, aes(x=var))+geom_histogram()}
 lapply(data,histf)

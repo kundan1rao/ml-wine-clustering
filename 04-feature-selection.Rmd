@@ -75,6 +75,7 @@ pr.var
 pve <- pr.var/sum(pr.var)
 pve
 ```
+
 ```{r}
 # plot of PVE explained by each principle component
 par(mfwow=c(2,1))
@@ -88,12 +89,14 @@ x <- data.matrix(scale(data))
 pcob <- prcomp(x)
 summary(pcob)
 ```
+
 ```{r}
 # singular value decomposition
 sX<-svd(x)
 names(sX)
 round(sX$v,3)
 ```
+
 ```{r}
 # compare with the above , both is same i.e. loading matrix
 pcob$rotation
