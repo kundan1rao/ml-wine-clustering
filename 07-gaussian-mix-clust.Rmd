@@ -9,24 +9,34 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# model based clutering (book)
 ```{r}
-gmm = GMM(data.scaled, 2, dist_mode = "maha_dist", seed_mode = "random_subset", km_iter = 10,
-          
-          em_iter = 10, verbose = F)  
-gmm
+library(mclust)
+mc<-Mclust(data.scaled)
+summary(mc)
+```
+```{r}
+#optimum number of cluster
+mc$G
 
-# predict centroids, covariance matrix and weights
+# cluster assignment of each observation
+head(mc$classification)
+```
 
-pr = predict_GMM(data.scaled, gmm$centroids, gmm$covariance_matrices, gmm$weights)    
-pr
+```{r}
+# visualisation
+library(factoextra)
+
+# BIC values used for choosing the number of clusters
+fviz_mclust(mc, "BIC", palette = "jco")
+
+# Classification: plot showing the clustering
+fviz_mclust(mc, "classification", geom = "point",
+pointsize = 1.5, palette = "jco")
+
+# Classification uncertainty
+fviz_mclust(mc, "uncertainty", palette = "jco")
 ```
 
 
 
-
-```{r}
-library(ClusterR)
-opt_gmm = Optimal_Clusters_GMM(data.scaled, max_clusters = 10, criterion = "BIC",
-                               dist_mode = "maha_dist", seed_mode = "random_subset",km_iter = 10, em_iter =10,var_floor=1e-10,plot_data = T)
-opt_gmm
-```

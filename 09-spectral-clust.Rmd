@@ -8,3 +8,42 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+Spectral clustering
+```{r}
+# gaussian data
+# transposed data frame
+data.scaled.trans <- as.data.frame(t(data.scaled))
+```
+
+```{r}
+library(Spectrum)
+spec.clust <- Spectrum(data.scaled.trans,showpca=T,fontsize=8,dotsize=2)
+#spec.clust
+```
+
+```{r}
+# non gaussian data
+spec.clust2 <- Spectrum(data.scaled.trans,showpca=T,method=2,tunekernel=T,fontsize=8,dotsize=2)
+```
+# Density based clustering
+## Determining optimum eps value
+```{r}
+library(dbscan)
+dbscan::kNNdistplot(data.scaled, k = 2)
+abline(h = 2.47, lty = 2)
+```
+
+```{r}
+# Compute DBSCAN using fpc package
+library("fpc")
+set.seed(123)
+db <- dbscan::dbscan(data.scaled, eps = 2.47, MinPts = 2)
+
+# Plot DBSCAN results
+library("factoextra")
+fviz_cluster(db, data = data.scaled, stand = FALSE,
+ellipse = FALSE, show.clust.cent = FALSE,
+geom = "point",palette = "jco", ggtheme = theme_classic())
+```
+
